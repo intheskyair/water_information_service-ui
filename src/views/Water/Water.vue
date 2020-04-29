@@ -5,7 +5,13 @@
         <Menu :active-name="MenuItem" @on-select="selectMenuItem">
           <Menu-group title="水利信息查询">
             <Menu-item name="s1-1">
-              <Icon type="document-text"></Icon>查询
+              <Icon type="document-text"></Icon>全国重点河道
+            </Menu-item>
+            <Menu-item name="s1-2">
+              <Icon type="document-text"></Icon>全国重点水库
+            </Menu-item>
+            <Menu-item name="s1-3">
+              <Icon type="document-text"></Icon>中国七大水系
             </Menu-item>
           </Menu-group>
           <Menu-group title="水利信息更改" v-if="this.logo == 'true'">
