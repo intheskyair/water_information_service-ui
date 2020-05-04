@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Carousel autoplay v-model="value2" loop dots="outside">
+    <Carousel autoplay loop dots="outside">
       <CarouselItem>
         <img alt="Vue logo" src="../../assets/1.png" />
       </CarouselItem>
