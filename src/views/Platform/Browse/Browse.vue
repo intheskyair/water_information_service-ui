@@ -35,7 +35,7 @@
       <div style="margin-top: 20px">
         <Button v-if="this.data.forum_article.like_num == 0" @click="like()">点赞</Button>
         <Button v-else @click="like()">点赞 {{this.data.forum_article.like_num}}</Button>
-        <Button style="margin-left: 10px" @click="handleReset()">分享</Button>
+        <Button style="margin-left: 10px" @click="CopyUrl()">分享</Button>
       </div>
     </Card>
     <Card style="margin-top: 30px">
@@ -291,6 +291,17 @@ export default {
             this.$Message.warning("获取数据失败，请刷新或重试。");
           }
         );
+    },
+    CopyUrl() {
+      const input = document.createElement("input");
+      document.body.appendChild(input);
+      input.setAttribute("value", window.location.href);
+      input.select();
+      if (document.execCommand("copy")) {
+        document.execCommand("copy");
+      }
+      document.body.removeChild(input);
+      this.$Message.success("复制本文链接成功，现在可以分享啦。");
     }
   },
   mounted() {
