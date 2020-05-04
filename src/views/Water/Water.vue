@@ -47,7 +47,11 @@ export default {
     selectMenuItem(name) {
       this.MenuItem = name;
       if (this.MenuItem == "s1-1") {
-        this.$router.push({ path: "/water/water_information" });
+        this.$router.push({ path: "/water/river" });
+      } else if (this.MenuItem == "s1-2") {
+        this.$router.push({ path: "/water/reservoir" });
+      } else if (this.MenuItem == "s1-3") {
+        this.$router.push({ path: "/water/system" });
       } else if (this.MenuItem == "s2-1") {
         this.$router.push({ path: "/water/add_info" });
       } else if (this.MenuItem == "s2-2") {

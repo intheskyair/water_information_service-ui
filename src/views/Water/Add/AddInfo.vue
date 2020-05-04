@@ -1,60 +1,126 @@
 <template>
   <div>
     <Card>
-      <p slot="title">录入单位信息</p>
+      <p slot="title">录入信息</p>
       <Form ref="formData" :model="formData" :rules="ruleValidate" :label-width="120">
-        <FormItem label="单位名称" prop="company_name">
-          <Input v-model="formData.company_name" style="width: 300px" placeholder="请输入单位名称"></Input>
-        </FormItem>
-        <FormItem label="所属级别" prop="level">
-          <Select v-model="formData.level" style="width:200px">
+        <FormItem label="信息类型" prop="level">
+          <Select v-model="selectType" style="width:200px">
             <Option v-for="item in levelList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="负责人" prop="principal">
-          <Input v-model="formData.principal" style="width: 300px" placeholder="请输入负责人姓名"></Input>
-        </FormItem>
-        <FormItem label="电话" prop="telephone_number">
-          <Input v-model="formData.telephone_number" style="width: 300px" placeholder="请输入单位联系方式"></Input>
-        </FormItem>
-        <FormItem label="传真" prop="fax_number">
-          <Input v-model="formData.fax_number" style="width: 300px" placeholder="请输入传真号"></Input>
-        </FormItem>
-        <FormItem label="邮编" prop="post_code">
-          <Input v-model="formData.post_code" style="width: 300px" placeholder="请输入邮编号"></Input>
-        </FormItem>
-        <FormItem label="地址" prop="address">
-          <Input v-model="formData.address" style="width: 300px" placeholder="请输入单位地址"></Input>
-        </FormItem>
-        <FormItem label="单位简介" prop="introduction">
-          <Input
-            v-model="formData.introduction"
-            :maxlength="introductionInputLength"
-            type="textarea"
-            placeholder="请输入单位简介"
-            :autosize="{minRows: 3,maxRows: 5}"
-          />
-        </FormItem>
-      </Form>
-      <Upload
-        v-if="this.formData.file.length == 0"
-        :before-upload="handleUpload"
-        accept="image/gif, image/jpeg, image/png, image/jpg"
-        type="drag"
-        :action="uploadUrl"
-        name="contributeHistoryPhoto"
-      >
-        <div style="padding: 20px 0">
-          <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-          <p>点击或拖拽文件到这里上传单位图片</p>
+        <div v-if="selectType == '重点河道'">
+          <FormItem label="站名" prop="name">
+            <Input v-model="formData.name" style="width: 300px" placeholder="请输入站名"></Input>
+          </FormItem>
+          <FormItem label="站址" prop="address">
+            <Input v-model="formData.address" style="width: 300px" placeholder="请输入站址"></Input>
+          </FormItem>
+          <FormItem label="河名" prop="river_name">
+            <Input v-model="formData.river_name" style="width: 300px" placeholder="请输入河名"></Input>
+          </FormItem>
+          <FormItem label="水位" prop="river_level">
+            <Input
+              v-model="formData.river_level"
+              :number="TRUE"
+              style="width: 300px"
+              placeholder="请输入水位"
+            ></Input>&nbsp;单位：m
+          </FormItem>
+          <FormItem label="流量" prop="flow">
+            <Input v-model="formData.flow" :number="TRUE" style="width: 300px" placeholder="请输入流量"></Input>&nbsp;单位：m^3/s
+          </FormItem>
+          <FormItem label="警戒水位" prop="alert_river_level">
+            <Input
+              v-model="formData.alert_river_level"
+              :number="TRUE"
+              style="width: 300px"
+              placeholder="请输入警戒水位"
+            ></Input>&nbsp;单位：m
+          </FormItem>
         </div>
-      </Upload>
-      <Row v-else style="padding: 20px 0; height: 118px; text-align: center; position:relative;">
-        <Col style>
-          <Icon size="40" type="ios-checkmark-circle-outline" />
-          <p style="font-size: 16px;">上传成功</p>
-        </Col>
-      </Row>
+        <div v-else-if="selectType == '重点水库'">
+          <FormItem label="站名" prop="name">
+            <Input v-model="formData.name" style="width: 300px" placeholder="请输入站名"></Input>
+          </FormItem>
+          <FormItem label="站址" prop="address">
+            <Input v-model="formData.address" style="width: 300px" placeholder="请输入站址"></Input>
+          </FormItem>
+          <FormItem label="河名" prop="river_name">
+            <Input v-model="formData.river_name" style="width: 300px" placeholder="请输入河名"></Input>
+          </FormItem>
+          <FormItem label="库水位" prop="river_level">
+            <Input
+              v-model="formData.river_level"
+              :number="TRUE"
+              style="width: 300px"
+              placeholder="请输入库水位"
+            ></Input>&nbsp;单位：m
+          </FormItem>
+          <FormItem label="储水量" prop="flow">
+            <Input v-model="formData.flow" :number="TRUE" style="width: 300px" placeholder="请输入流量"></Input>&nbsp;单位：亿m^3
+          </FormItem>
+          <FormItem label="汛限水位" prop="alert_river_level">
+            <Input
+              v-model="formData.alert_river_level"
+              :number="TRUE"
+              style="width: 300px"
+              placeholder="请输入警戒水位"
+            ></Input>&nbsp;单位：m
+          </FormItem>
+        </div>
+      </Form>
+      <div v-if="selectType == '七大水系'">
+        <Form ref="system" :model="system" :rules="systemRuleValidate" :label-width="120">
+          <FormItem label="水系" prop="system_name">
+            <Select v-model="system.system_name" style="width:200px">
+              <Option
+                v-for="item in systemList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="站名" prop="name">
+            <Input v-model="system.name" style="width: 300px" placeholder="请输入站名"></Input>
+          </FormItem>
+          <FormItem label="水位" prop="level">
+            <Input v-model="system.level" :number="TRUE" style="width: 300px" placeholder="请输入水位"></Input>&nbsp;单位：m
+          </FormItem>
+          <FormItem label="流量" prop="flow">
+            <Input v-model="system.flow" :number="TRUE" style="width: 300px" placeholder="请输入流量"></Input>&nbsp;单位：m^3/s
+          </FormItem>
+          <FormItem label="涨落" prop="potential">
+            <Select v-model="system.potential" style="width:200px">
+              <Option
+                v-for="item in potentialList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+        </Form>
+      </div>
+      <div v-if="selectType == '热点信息'">
+        <Upload
+          v-if="this.file.length == 0"
+          :before-upload="handleUpload"
+          accept="image/gif, image/jpeg, image/png, image/jpg"
+          type="drag"
+          :action="uploadUrl"
+          name="contributeHistoryPhoto"
+        >
+          <div style="padding: 20px 0">
+            <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+            <p>点击或拖拽文件到这里上传热点信息图片</p>
+          </div>
+        </Upload>
+        <Row v-else style="padding: 20px 0; height: 118px; text-align: center; position:relative;">
+          <Col style>
+            <Icon size="40" type="ios-checkmark-circle-outline" />
+            <p style="font-size: 16px;">上传成功</p>
+          </Col>
+        </Row>
+      </div>
     </Card>
     <div class="button">
       <Button type="primary" @click="handleReset('formData')">清空</Button>
@@ -69,67 +135,174 @@ export default {
   components: {},
   data() {
     return {
-      introductionInputLength: 512,
+      TRUE: true,
+      selectType: "重点河道",
       levelList: [
         {
-          value: "厅属",
-          label: "厅属"
+          value: "重点河道",
+          label: "重点河道"
         },
         {
-          value: "市区",
-          label: "市区"
+          value: "重点水库",
+          label: "重点水库"
+        },
+        {
+          value: "七大水系",
+          label: "七大水系"
+        },
+        {
+          value: "热点信息",
+          label: "热点信息"
+        }
+      ],
+      systemList: [
+        {
+          value: "长江",
+          label: "长江"
+        },
+        {
+          value: "黄河",
+          label: "黄河"
+        },
+        {
+          value: "松辽",
+          label: "松辽"
+        },
+        {
+          value: "海河",
+          label: "海河"
+        },
+        {
+          value: "淮河",
+          label: "淮河"
+        },
+        {
+          value: "珠江",
+          label: "珠江"
+        },
+        {
+          value: "太湖",
+          label: "太湖"
+        }
+      ],
+      potentialList: [
+        {
+          value: "落",
+          label: "落"
+        },
+        {
+          value: "平",
+          label: "平"
+        },
+        {
+          value: "涨",
+          label: "涨"
         }
       ],
       uploadUrl:
         process.env.VUE_APP_BASE_URL +
         process.env.VUE_APP_VERSION +
         process.env.VUE_APP_FILTER +
-        "/water/upload",
+        "/water/upload", // 这个没有用
       formData: {
-        company_name: "",
-        principal: "",
-        telephone_number: "",
-        fax_number: "",
-        post_code: "",
+        name: "",
         address: "",
-        level: "",
-        introduction: "",
-        file: []
+        river_name: "",
+        river_level: "",
+        flow: "",
+        alert_river_level: ""
       },
+      system: {
+        system_name: "",
+        name: "",
+        level: "",
+        flow: "",
+        potential: ""
+      },
+      file: [],
       ruleValidate: {
-        company_name: [
+        name: [
           {
             required: true,
-            message: "单位名称不能为空",
-            trigger: "blur"
-          }
-        ],
-        telephone_number: [
-          {
-            required: true,
-            message: "联系电话不能为空",
+            message: "站名不能为空",
             trigger: "blur"
           }
         ],
         address: [
           {
             required: true,
-            message: "地址不能为空",
+            message: "站址不能为空",
+            trigger: "blur"
+          }
+        ],
+        river_name: [
+          {
+            required: true,
+            message: "河名不能为空",
+            trigger: "blur"
+          }
+        ],
+        river_level: [
+          {
+            required: true,
+            message: "请输入正整数或小数，小数点后最多两位。",
+            trigger: "change",
+            pattern: /^([1-9]([0-9]{0,3})[\.][0-9]{1,2}|[0]|\d[\.][0-9]{1,2}|[1-9]([0-9]{0,3}))$/
+          }
+        ],
+        flow: [
+          {
+            required: true,
+            message: "请输入正整数或小数，小数点后最多两位。",
+            trigger: "change",
+            pattern: /^([1-9]([0-9]{0,3})[\.][0-9]{1,2}|[0]|\d[\.][0-9]{1,2}|[1-9]([0-9]{0,3}))$/
+          }
+        ],
+        alert_river_level: [
+          {
+            required: true,
+            message: "请输入正整数或小数，小数点后最多两位。",
+            trigger: "change",
+            pattern: /^([1-9]([0-9]{0,3})[\.][0-9]{1,2}|[0]|\d[\.][0-9]{1,2}|[1-9]([0-9]{0,3}))$/
+          }
+        ]
+      },
+      systemRuleValidate: {
+        system_name: [
+          {
+            required: true,
+            message: "水系名不能为空",
+            trigger: "blur"
+          }
+        ],
+        name: [
+          {
+            required: true,
+            message: "站名不能为空",
+            trigger: "blur"
+          }
+        ],
+        potential: [
+          {
+            required: true,
+            message: "涨落不能为空",
             trigger: "blur"
           }
         ],
         level: [
           {
             required: true,
-            message: "所属级别不能为空",
-            trigger: "blur"
+            message: "请输入正整数或小数，小数点后最多两位。",
+            trigger: "change",
+            pattern: /^([1-9]([0-9]{0,3})[\.][0-9]{1,2}|[0]|\d[\.][0-9]{1,2}|[1-9]([0-9]{0,3}))$/
           }
         ],
-        introduction: [
+        flow: [
           {
             required: true,
-            message: "单位简介不能为空",
-            trigger: "blur"
+            message: "请输入正整数或小数，小数点后最多两位。",
+            trigger: "change",
+            pattern: /^([1-9]([0-9]{0,3})[\.][0-9]{1,2}|[0]|\d[\.][0-9]{1,2}|[1-9]([0-9]{0,3}))$/
           }
         ]
       }
@@ -137,59 +310,88 @@ export default {
   },
   methods: {
     handleUpload(file) {
-      this.formData.file.push(file);
+      this.file.push(file);
       return false;
     },
     handleReset(name) {
-      this.formData.file = [];
+      this.file = [];
       this.$refs[name].resetFields();
     },
     submit(name) {
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          const msg = this.$Message.loading({
-            content: "Loading...",
-            duration: 0
-          });
-          let config = {
-            headers: {
-              "Content-Type":
-                "multipart/form-data; boundary = " + new Date().getTime()
+      if ((this.selectType == "重点河道") | (this.selectType == "重点水库")) {
+        this.$refs[name].validate(valid => {
+          if (valid) {
+            const msg = this.$Message.loading({
+              content: "Loading...",
+              duration: 0
+            });
+            var url;
+            if (this.selectType == "重点河道") {
+              url =
+                process.env.VUE_APP_BASE_URL +
+                process.env.VUE_APP_VERSION +
+                process.env.VUE_APP_FILTER +
+                "/water/river";
+            } else {
+              url =
+                process.env.VUE_APP_BASE_URL +
+                process.env.VUE_APP_VERSION +
+                process.env.VUE_APP_FILTER +
+                "/water/reservoir";
             }
-          };
-          // 处理file上传文件
-          let req = new FormData();
-          for (let i = 0; i < this.formData.file.length; i++) {
-            req.append("file", this.formData.file[i]);
+            this.axios.post(url, this.formData).then(
+              res => {
+                setTimeout(msg, 0);
+                let data = res.data;
+                if (data.code == 2000) {
+                  this.$Message.success("提交成功");
+                  this.handleReset("formData");
+                } else if (res.data.code == 2008) {
+                  this.$Message.warning("请重新登录后再尝试操作");
+                  this.$router.replace({ path: "/login" });
+                } else {
+                  this.$Message.warning(
+                    "提交失败，请检查是否该信息已存在。" + data.msg
+                  );
+                }
+              },
+              res => {
+                setTimeout(msg, 0);
+                this.$Message.warning("提交失败，请刷新或重试。");
+              }
+            );
+          } else {
+            this.$Message.warning("请输入正确的内容");
           }
-          // 处理formData数据
-          const map = new Map([
-            ["company_name", this.formData.company_name],
-            ["principal", this.formData.principal],
-            ["telephone_number", this.formData.telephone_number],
-            ["fax_number", this.formData.fax_number],
-            ["post_code", this.formData.post_code],
-            ["address", this.formData.address],
-            ["level", this.formData.level],
-            ["introduction", this.formData.introduction]
-          ]);
-          for (let [key, value] of map) {
-            req.append(key, value);
-          }
-          this.axios.post(this.uploadUrl, req, config).then(
+        });
+      } else if (this.selectType == "七大水系") {
+        // 七大水系
+        const msg = this.$Message.loading({
+          content: "Loading...",
+          duration: 0
+        });
+        this.axios
+          .post(
+            process.env.VUE_APP_BASE_URL +
+              process.env.VUE_APP_VERSION +
+              process.env.VUE_APP_FILTER +
+              "/water/system",
+            this.system
+          )
+          .then(
             res => {
               setTimeout(msg, 0);
               let data = res.data;
               if (data.code == 2000) {
                 this.$Message.success("提交成功");
                 this.handleReset("formData");
-              } else if (data.code == 2006) {
-                this.$Message.warning("该单位已注册");
               } else if (res.data.code == 2008) {
-                this.$Message.warning("请登录后再尝试操作");
+                this.$Message.warning("请重新登录后再尝试操作");
                 this.$router.replace({ path: "/login" });
               } else {
-                this.$Message.warning("提交失败，" + data.msg);
+                this.$Message.warning(
+                  "提交失败，请检查是否该信息已存在。" + data.msg
+                );
               }
             },
             res => {
@@ -197,10 +399,54 @@ export default {
               this.$Message.warning("提交失败，请刷新或重试。");
             }
           );
-        } else {
-          this.$Message.warning("请输入正确的内容");
+      } else {
+        // 热点信息图片;
+        const msg = this.$Message.loading({
+          content: "Loading...",
+          duration: 0
+        });
+        let config = {
+          headers: {
+            "Content-Type":
+              "multipart/form-data; boundary = " + new Date().getTime()
+          }
+        };
+        // 处理file上传文件
+        let req = new FormData();
+        for (let i = 0; i < this.file.length; i++) {
+          req.append("file", this.file[i]);
         }
-      });
+        this.axios
+          .post(
+            process.env.VUE_APP_BASE_URL +
+              process.env.VUE_APP_VERSION +
+              process.env.VUE_APP_FILTER +
+              "/water/file",
+            req,
+            config
+          )
+          .then(
+            res => {
+              setTimeout(msg, 0);
+              let data = res.data;
+              if (data.code == 2000) {
+                this.$Message.success("提交成功");
+                this.handleReset("formData");
+              } else if (res.data.code == 2008) {
+                this.$Message.warning("请重新登录后再尝试操作");
+                this.$router.replace({ path: "/login" });
+              } else {
+                this.$Message.warning(
+                  "提交失败，请检查是否该信息已存在。" + data.msg
+                );
+              }
+            },
+            res => {
+              setTimeout(msg, 0);
+              this.$Message.warning("提交失败，请刷新或重试。");
+            }
+          );
+      }
     }
   },
   computed: {},
