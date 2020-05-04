@@ -8,12 +8,13 @@ import Register from '../views/Register/Register.vue'
 import Error_404 from '../views/Error_404.vue'
 import Index from '../components/Index.vue'
 import Home from '../views/Home/Home.vue'
-import Home_about from '../views/Home/Home_about.vue'
-import Home_index from '../views/Home/Home_index.vue'
 import Center from '../views/Center/Center.vue'
-import WaterInformation from '../views/Water/Query/WaterInformation.vue'
-import WaterInformationDetail from '../views/Water/Query/WaterInformationDetail.vue'
-import AlterConfirm from '../views/Water/Alter/AlterConfirm.vue'
+import WaterRiver from '../views/Water/Query/River.vue'
+import WaterReservoir from '../views/Water/Query/Reservoir.vue'
+import WaterSystem from '../views/Water/Query/System.vue'
+import AlterRiver from '../views/Water/Alter/River.vue'
+import AlterReservoir from '../views/Water/Alter/Reservoir.vue'
+import AlterSystem from '../views/Water/Alter/System.vue'
 import Alter from '../views/Water/Alter/Alter.vue'
 import AddInfo from '../views/Water/Add/AddInfo.vue'
 import CreateArticle from '../views/Platform/Edit/CreateArticle.vue'
@@ -36,35 +37,28 @@ const routes = [
       {
         path: 'home',
         name: 'home',
-        component: Home,
-        children: [
-          {
-            path: 'index',
-            name: 'home_index',
-            component: Home_index
-          },
-          {
-            path: 'about',
-            name: 'home_about',
-            component: Home_about
-          }
-        ]
+        component: Home
       },
       {
         path: 'water',
         name: 'water',
         component: Water,
-        redirect: '/water/water_information',
+        redirect: '/water/river',
         children: [
           {
-            path: 'water_information',
-            name: 'WaterInformation',
-            component: WaterInformation
+            path: 'river',
+            name: 'WaterRiver',
+            component: WaterRiver
           },
           {
-            path: 'water_information_detail',
-            name: 'WaterInformationDetail',
-            component: WaterInformationDetail
+            path: 'reservoir',
+            name: 'WaterReservoir',
+            component: WaterReservoir
+          },
+          {
+            path: 'system',
+            name: 'WaterSystem',
+            component: WaterSystem
           },
           {
             path: 'add_info',
@@ -74,12 +68,24 @@ const routes = [
           {
             path: 'alter',
             name: 'Alter',
-            component: Alter
-          },
-          {
-            path: 'alter_confirm',
-            name: 'AlterConfirm',
-            component: AlterConfirm
+            component: Alter,
+            children: [
+              {
+                path: 'river',
+                name: 'AlterRiver',
+                component: AlterRiver,
+              },
+              {
+                path: 'reservoir',
+                name: 'AlterReservoir',
+                component: AlterReservoir,
+              },
+              {
+                path: 'system',
+                name: 'AlterSystem',
+                component: AlterSystem,
+              }
+            ]
           }
         ]
       },
