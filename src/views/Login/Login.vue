@@ -30,10 +30,10 @@
           <p slot="title">第三方登录方式</p>
           <Row>
             <Col span="6">
-              <img style="cursor:pointer" src="../../assets/icon32_wx_logo.png" />
+              <img style="cursor:pointer" src="../../assets/icon32_wx_logo.png" @click="prompt()" />
             </Col>
             <Col span="6">
-              <img style="cursor:pointer" src="../../assets/alipay_logo.png" />
+              <img style="cursor:pointer" src="../../assets/alipay_logo.png" @click="prompt()" />
             </Col>
           </Row>
         </Card>
@@ -141,6 +141,9 @@ export default {
     },
     register() {
       this.$router.push({ path: "/register" });
+    },
+    prompt() {
+      this.$Message.success("程序员小哥哥正在努力开发中");
     }
   },
   mounted() {
