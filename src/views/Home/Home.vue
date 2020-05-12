@@ -2,22 +2,22 @@
   <div class="home">
     <Carousel autoplay loop dots="outside">
       <CarouselItem>
-        <img alt="Vue logo" src="../../assets/1.png" />
+        <img alt="Vue logo" src="../../../static/1.png" />
       </CarouselItem>
       <CarouselItem>
-        <img alt="Vue logo" src="../../assets/2.png" />
+        <img alt="Vue logo" src="../../../static/2.png" />
       </CarouselItem>
       <CarouselItem>
-        <img alt="Vue logo" src="../../assets/3.png" />
+        <img alt="Vue logo" src="../../../static/3.png" />
       </CarouselItem>
       <CarouselItem>
-        <img alt="Vue logo" src="../../assets/4.png" />
+        <img alt="Vue logo" src="../../../static/4.png" />
       </CarouselItem>
       <CarouselItem>
-        <img alt="Vue logo" src="../../assets/5.png" />
+        <img alt="Vue logo" src="../../../static/5.png" />
       </CarouselItem>
       <CarouselItem>
-        <img alt="Vue logo" src="../../assets/6.png" />
+        <img alt="Vue logo" src="../../../static/6.png" />
       </CarouselItem>
     </Carousel>
   </div>

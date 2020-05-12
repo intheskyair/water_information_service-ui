@@ -187,7 +187,7 @@ export default {
               if (response.data.code == 2000) {
                 this.commentText = "";
                 this.$Message.success("评论成功");
-              } else if (res.data.code == 2008) {
+              } else if (response.data.code == 2008) {
                 this.$Message.warning("请登录后再尝试操作");
                 this.$router.replace({ path: "/login" });
               } else {
@@ -292,6 +292,36 @@ export default {
           }
         );
     },
+    share() {
+      if (this.mail == "") {
+        this.$router.replace({ path: "/login" });
+      } else {
+        let req = {
+          article_id: this.data.forum_article.id
+        };
+        this.axios
+          .post(
+            process.env.VUE_APP_BASE_URL +
+              process.env.VUE_APP_VERSION +
+              process.env.VUE_APP_FILTER +
+              "/forum/share",
+            req
+          )
+          .then(
+            res => {
+              if (res.data.code == 2008) {
+                this.$Message.warning("请登录后再尝试操作");
+                this.$router.replace({ path: "/login" });
+              } else if (res.data.code != 2000) {
+                this.$Message.warning("失败，" + res.data.msg);
+              }
+            },
+            res => {
+              this.$Message.warning("失败，请刷新或重试。");
+            }
+          );
+      }
+    },
     CopyUrl() {
       const input = document.createElement("input");
       document.body.appendChild(input);
@@ -302,6 +332,7 @@ export default {
       }
       document.body.removeChild(input);
       this.$Message.success("复制本文链接成功，现在可以分享啦。");
+      this.share();
     }
   },
   mounted() {
